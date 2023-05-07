@@ -10,7 +10,7 @@ body {
 
 @font-face {
   font-family: 'Namefont';
-  src: url('/Users/hei/Desktop/src/Namefont.ttf') format('truetype');
+  src: url('Namefont.ttf') format('truetype');
   font-weight: 400; /* Set the font weight */
   font-style: normal; /* Set the font style */
 }
