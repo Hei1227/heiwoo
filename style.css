@@ -10,7 +10,9 @@ body {
 
 @font-face {
   font-family: 'Namefont';
-  src: url('Namefont.ttf') format('truetype');
+  src: url('Namefont.woff2') format('woff2'),
+       url('Namefont.woff') format('woff'),
+       url('Namefont.ttf') format('truetype');
   font-weight: 400; /* Set the font weight */
   font-style: normal; /* Set the font style */
 }
