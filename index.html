@@ -4,68 +4,86 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Rubik&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="style.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-  <div id="wrapper" data-configuration="1" data-roundness="2">
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape"></div>
-    <div class="shape">
-    </div>
-    <div class="aboutcontenttitle" > I'm Alvin, an ITMB student at AMBS</div>
-    <div class="aboutcontent" >
-        I'm an ambitious Information Technology Management for Business student at the University of Manchester, passionate about using tech to make businesses more efficient. I've gained valuable skills from various projects and activities and enjoy investing and GTO poker in my free time. These interests fuel my enthusiasm for exploring opportunities in the technology and finance sectors.
-        
-        I'm on the lookout for internships or placement positions to apply my knowledge and skills to real-world challenges. Driven by a commitment to lifelong learning and making a positive impact, I'm excited to connect with like-minded individuals. Let's chat about opportunities, share insights, or just grow our networks.
-    
-            Find me on <a href="https://www.linkedin.com/in/chinheiwoo/" target="_blank" class="linkedin-link">LinkedIn</a> or drop me an <span class="email-link" onclick="copyEmailToClipboard()">Email</span>.
-    </div>
+ <div id="wrapper" data-configuration="1" data-roundness="2">
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape">
   </div>
-  
-<div class="labelabout" >ABOUT</div>
-<div class="labelreturntohome" onclick="navigateToHome()">&#xe5cd;</div>
+</div>
+<div class="label" onclick="navigateToAbout()">Hei Woo</div>
 
 <script>
-  function navigateToHome() {
-    const labelReturnToHome = document.querySelector(".labelreturntohome");
-    const labelAbout = document.querySelector(".labelabout");
-    const shapes = document.querySelectorAll(".shape");
+  const wrapper = document.getElementById("wrapper");
 
-    labelReturnToHome.style.animation = "fadeOut 1s forwards";
-    labelAbout.style.animation = "fadeOut 1s forwards";
+  const rand = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
-    shapes.forEach(shape => {
-      shape.style.animation = "zoomInFade 1s forwards";
-    });
-
-    setTimeout(() => {
-      location.href = "homepage.html";
-    }, 760);
+  const uniqueRand = (min, max, prev) => {
+    let next = prev;
+    
+    while(prev === next) next = rand(min, max);
+    
+    return next;
   }
+
+  const combinations = [
+    { configuration: 1, roundness: 1 },
+    { configuration: 1, roundness: 2 },
+    { configuration: 1, roundness: 4 },
+    { configuration: 2, roundness: 2 },
+    { configuration: 2, roundness: 3 },
+    { configuration: 3, roundness: 3 }
+  ];
+
+  let prev = 0;
+
+  setInterval(() => {
+    const index = uniqueRand(0, combinations.length - 1, prev),
+          combination = combinations[index];
+    
+    wrapper.dataset.configuration = combination.configuration;
+    wrapper.dataset.roundness = combination.roundness;
+    
+    // Remove instant-transition class from shapes
+    shapes.forEach(shape => shape.classList.remove('instant-transition'));
+
+    prev = index;
+  }, 3000);
+
+  function navigateToAbout() {
+    const label = document.querySelector(".label");
+    label.style.animation = "fadeOut 800ms forwards";
+
+    const wrapper = document.getElementById("wrapper");
+    const firstShape = document.querySelector("#wrapper > .shape:nth-child(1)");
+    wrapper.dataset.configuration = "1";
+    wrapper.dataset.roundness = "2";
+    firstShape.dataset.gotoAbout = "true";
+    setTimeout(() => {
+      location.href = "about.html";
+    }, 800);
+  }
+
+  document.querySelectorAll("#wrapper > .shape").forEach((shape) => {
+    shape.addEventListener("transitionend", (e) => {
+      if (e.propertyName === "left" && e.target.dataset.gotoAbout === "true") {
+        location.href = "about.html";
+      }
+    });
+  });
 
   function onLoad() {
-    const shapes = document.querySelectorAll(".shape");
-    shapes.forEach(shape => {
-      shape.style.animation = "zoomOutFade 1s forwards";
-    });
+    const label = document.querySelector(".label");
+    label.style.animation = "slideUp 800ms forwards";
   }
 
-  function copyEmailToClipboard() {
-  const email = 'chin.woo@student.manchester.ac.uk'; // Replace with your actual email address
-  const textarea = document.createElement('textarea');
-  textarea.value = email;
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand('copy');
-  document.body.removeChild(textarea);
-}
-
   document.addEventListener("DOMContentLoaded", onLoad);
+
 </script>
 </body>
 </html>
-
