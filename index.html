@@ -7,14 +7,13 @@
 </head>
 <body>
  <div id="wrapper" data-configuration="1" data-roundness="2">
-  <div class="shape"></div>
-  <div class="shape"></div>
-  <div class="shape"></div>
-  <div class="shape"></div>
-  <div class="shape"></div>
-  <div class="shape"></div>
-  <div class="shape">
-  </div>
+  <div onmouseover="stopAnimation()" onmouseout="resumeAnimation()" class="shape"></div>
+  <div onmouseover="stopAnimation()" onmouseout="resumeAnimation()" class="shape"></div>
+  <div onmouseover="stopAnimation()" onmouseout="resumeAnimation()"class="shape"></div>
+  <div onmouseover="stopAnimation()" onmouseout="resumeAnimation()"class="shape"></div>
+  <div onmouseover="stopAnimation()" onmouseout="resumeAnimation()"class="shape"></div>
+  <div onmouseover="stopAnimation()" onmouseout="resumeAnimation()"class="shape"></div>
+  <div onmouseover="stopAnimation()" onmouseout="resumeAnimation()"class="shape"></div>
 </div>
 <div class="label" onclick="navigateToAbout()">Hei Woo</div>
 
@@ -25,11 +24,11 @@
 
   const uniqueRand = (min, max, prev) => {
     let next = prev;
-    
-    while(prev === next) next = rand(min, max);
-    
+
+    while (prev === next) next = rand(min, max);
+
     return next;
-  }
+  };
 
   const combinations = [
     { configuration: 1, roundness: 1 },
@@ -41,19 +40,21 @@
   ];
 
   let prev = 0;
+  let shapeTransformationInterval;
 
-  setInterval(() => {
-    const index = uniqueRand(0, combinations.length - 1, prev),
-          combination = combinations[index];
-    
-    wrapper.dataset.configuration = combination.configuration;
-    wrapper.dataset.roundness = combination.roundness;
-    
-    // Remove instant-transition class from shapes
-    shapes.forEach(shape => shape.classList.remove('instant-transition'));
+  function startShapeTransformation(intervalDuration) {
+    clearInterval(shapeTransformationInterval);
 
-    prev = index;
-  }, 3000);
+    shapeTransformationInterval = setInterval(() => {
+      const index = uniqueRand(0, combinations.length - 1, prev),
+        combination = combinations[index];
+
+      wrapper.dataset.configuration = combination.configuration;
+      wrapper.dataset.roundness = combination.roundness;
+
+      prev = index;
+    }, intervalDuration);
+  }
 
   function navigateToAbout() {
     const label = document.querySelector(".label");
@@ -69,13 +70,13 @@
     }, 800);
   }
 
-  document.querySelectorAll("#wrapper > .shape").forEach((shape) => {
-    shape.addEventListener("transitionend", (e) => {
-      if (e.propertyName === "left" && e.target.dataset.gotoAbout === "true") {
-        location.href = "about.html";
-      }
-    });
-  });
+  function stopAnimation() {
+    clearInterval(shapeTransformationInterval);
+  }
+
+  function resumeAnimation() {
+    startShapeTransformation(3000);
+  }
 
   function onLoad() {
     const label = document.querySelector(".label");
@@ -84,6 +85,8 @@
 
   document.addEventListener("DOMContentLoaded", onLoad);
 
+  // Start the shape transformation with the initial interval duration
+  startShapeTransformation(3000);
 </script>
 </body>
 </html>
